@@ -1,6 +1,5 @@
-# sickleQuantitation with iteration over files
-# Takes data from a single image and returns the percent sickle for that one image.
-# Super inefficient but it works.
+# Takes .csv files outputted from sickleCounter3.ijm, returning the percentage of sickle cells
+
 import os
 import warnings
 import openpyxl
@@ -8,7 +7,6 @@ import pandas as pds
 import numpy as np
 
 divisionList = []
-#directory = os.fsencode('/Users/kateplas/Documents/Lab/ImageJproject/sickCellCountPrgrm/batchAnalysisOutput')
 
 #os.chdir('/batchAnalysisOutput')  # Provide the new path here
 os.getcwd()
