@@ -1,0 +1,45 @@
+// Takes a tif and outputs an excel file with major and minor values. 
+directory1 = getDirectory("Choose Source Directory");
+directory2 = getDirectory("Choose Destination Directory ");
+list = getFileList(directory1); 
+
+setBatchMode(true);
+
+for (i = 0; i < list.length; i++){
+	showProgress(i + 1, list.length);
+	open(directory1+list[i]); 
+    
+    //-------The Macro------------
+	run("8-bit");
+	run("Subtract Background...", "rolling=10 light");
+	//setAutoThreshold("Intermodes");
+	run("Threshold...");
+	setThreshold(0, 211);
+	setOption("BlackBackground", false);
+	run("Convert to Mask");
+	run("Fill Holes");
+	run("Analyze Particles...", "size=50-150 circularity=0.00-10.00 show=Overlay display add");
+	
+	// ------------------------
+	saveAs("Results", directory2 + i + "res" + ".csv"); //  Macro's results. The second part is where to save 
+	close();
+}
+
+/*
+function getFormat(){
+	formats = newArray("TIFF", "8-bit TIFF", "JPEG", "GIF", "PNG",
+       "PGM", "BMP", "FITS", "Text Image", "ZIP", "Raw");
+       Dialog.create("Batch Convert");
+    Dialog.addChoice("Convert to: ", formats, "TIFF");
+    Dialog.show();
+    return Dialog.getChoice();
+}
+
+function convertTo8Bit() {
+    if (bitDepth==24)
+        run("8-bit Color", "number=256");
+    else
+		run("8-bit");
+}
+
+*/
