@@ -1,6 +1,3 @@
-# sickleQuantitation
-# sickleQuantitation with iteration over files  # Takes data from a single image and returns the percent sickle for that one image. # Super inefficient but it works.
-
 Input: A directory with images with blood cells
 Output: Percentage of sickle cells for each image.
 
