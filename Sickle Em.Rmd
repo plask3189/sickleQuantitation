@@ -1,0 +1,44 @@
+---
+title: "Average Percent Sickle"
+author: "Kate Plas"
+date: '2022-06-05'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load packages}
+library (tidyverse)
+library (ggsci)
+```
+
+```{r load data}
+wideFile <- read.csv("/Users/kateplas/Documents/Lab/ImageJproject/sickCellCountPrgrm/batchAnalysisOutput/mouseInfoOutput.csv") 
+```
+
+```{r reshape data}
+narrowData <- wideFile %>% pivot_longer(cols = 1:ncol (wideFile), # wideFile is passed to pivot_longer. 
+                                   names_to = "Filename", # Filename becomes the first column
+                                   values_to = "PercentSick") %>% # PercentSick becomes second column 
+  mutate(Mouse = str_extract(Filename, "\\d+")) # The output of pivot_longer() is passed into mutate(). 
+# narrowData gets a new column with the titled Mouse having concise mouse numbers
+# \\d+ means to match one or more digits. so match as many numbers as possible before any non-digits like a letter. 
+```
+
+```{r calculation}
+Averages <- narrowData %>% group_by(Mouse) %>% summarize(Mean = mean(PercentSick), SD = sd(PercentSick))
+# Take narrowData then group by the Mouse ID then find the mean and sd of each of the groups!
+```
+
+```{r plot}
+ggplot(Averages, aes(x = Mouse, y = Mean, fill = Mouse)) +
+  geom_col() +
+  geom_errorbar(aes(ymax = Mean + SD,
+                      ymin = Mean - SD),
+                 width = 0.2) +
+coord_cartesian(ylim = c(2.69, 2.75)) +
+  theme_classic()
+  # scale_fill_brewer(palette = "Greens")
+```
